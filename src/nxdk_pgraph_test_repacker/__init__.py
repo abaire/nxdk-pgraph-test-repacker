@@ -117,11 +117,15 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
     with zipfile.ZipFile(zip_path) as archive:
         for member in archive.infolist():
             filename = member.filename
-            if filename != binary_name:
+            # Handle potentially nested artifacts/extract-xiso.exe
+            basename = os.path.basename(filename)
+            if basename != binary_name:
                 continue
 
             output_dir = os.path.dirname(output_path)
             archive.extract(member, output_dir)
+            if filename != basename:
+                os.rename(os.path.join(output_dir, filename), os.path.join(output_dir, basename))
             if os.path.basename(output_path) != binary_name:
                 os.rename(os.path.join(output_dir, binary_name), output_path)
             os.chmod(output_path, 0o700)
