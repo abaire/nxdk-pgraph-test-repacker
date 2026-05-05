@@ -24,8 +24,8 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "platformdirs~=4.3.6",
-  "requests~=2.32.3",
+  "platformdirs~=4.9.6",
+  "requests~=2.33.1",
 ]
 
 [project.urls]
