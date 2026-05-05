@@ -32,7 +32,7 @@ _NXDK_PGRAPH_TESTS_CONFIG_FILE = "nxdk_pgraph_tests_config.json"
 def _fetch_release_info(api_url: str, tag: str = "latest") -> dict[str, Any] | None:
     full_url = f"{api_url}/releases/{tag}"
     try:
-        logging.debug("Fetching info via GitHub API")
+        logger.debug("Fetching info via GitHub API")
         response = requests.get(
             full_url,
             headers={"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"},
@@ -47,7 +47,7 @@ def _fetch_release_info(api_url: str, tag: str = "latest") -> dict[str, Any] | N
 
 def download_latest_iso(output_path: str | PathLike) -> bool:
     """Downloads the latest nxdk_pgraph_tests xiso."""
-    logging.info("Downloading latest nxdk_pgraph_tests xiso...")
+    logger.info("Downloading latest nxdk_pgraph_tests xiso...")
 
     info = _fetch_release_info(_NXDK_PGRAPH_TESTS_REPO_API)
     if not info:
@@ -75,7 +75,7 @@ def download_latest_iso(output_path: str | PathLike) -> bool:
 
 
 def _download_latest_extract_xiso(output_path: str) -> bool:
-    logging.info("Downloading latest extract-xiso release...")
+    logger.info("Downloading latest extract-xiso release...")
     info = _fetch_release_info(_EXTRACT_XISO_REPO_API)
     if not info:
         return False
@@ -112,7 +112,7 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
     urlretrieve(download_url, zip_path)  # noqa: S310 - checked just above
     urlcleanup()
 
-    logging.debug("Extracting binary from zip file at %s", zip_path)
+    logger.debug("Extracting binary from zip file at %s", zip_path)
     binary_name = "extract-xiso.exe" if system_name == "Windows" else "extract-xiso"
     with zipfile.ZipFile(zip_path) as archive:
         for member in archive.infolist():
@@ -131,7 +131,7 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
             os.chmod(output_path, 0o700)
             return True
 
-    logging.error("Failed to find extract-xiso binary within zip file at %s", zip_path)
+    logger.error("Failed to find extract-xiso binary within zip file at %s", zip_path)
     return False
 
 
