@@ -35,7 +35,10 @@ def _fetch_release_info(api_url: str, tag: str = "latest") -> dict[str, Any] | N
         logger.debug("Fetching info via GitHub API")
         response = requests.get(
             full_url,
-            headers={"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"},
+            headers={
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
             timeout=15,
         )
         response.raise_for_status()
@@ -102,7 +105,10 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
             break
 
     if not download_url:
-        logger.error("Failed to fetch download URL for latest extract-xiso release with platform %s", asset_name)
+        logger.error(
+            "Failed to fetch download URL for latest extract-xiso release with platform %s",
+            asset_name,
+        )
         return False
 
     zip_path = f"{output_path}.zip"
@@ -125,7 +131,10 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
             output_dir = os.path.dirname(output_path)
             archive.extract(member, output_dir)
             if filename != basename:
-                os.rename(os.path.join(output_dir, filename), os.path.join(output_dir, basename))
+                os.rename(
+                    os.path.join(output_dir, filename),
+                    os.path.join(output_dir, basename),
+                )
             if os.path.basename(output_path) != binary_name:
                 os.rename(os.path.join(output_dir, binary_name), output_path)
             os.chmod(output_path, 0o700)
@@ -135,7 +144,7 @@ def _download_latest_extract_xiso(output_path: str) -> bool:
     return False
 
 
-def ensure_extract_xiso(path_hint: str | None) -> str | None:
+def ensure_extract_xiso(path_hint: str | None = None) -> str | None:
     """Ensures that the extract-xiso program is available and returns its path.
 
     :param path_hint - Path at which the extract-xiso program is expected to be
@@ -178,11 +187,20 @@ def _ensure_output_directory(output: str) -> str:
 
 def repack_config(iso_file: str, output_file: str, config_file: str, extract_xiso_binary: str) -> bool:
     """Updates the given nxdk_pgraph_tests xiso with a new JSON config file and writes it to the given location."""
-    logger.info("Repacking config in %s from %s using %s", iso_file, config_file, extract_xiso_binary)
+    logger.info(
+        "Repacking config in %s from %s using %s",
+        iso_file,
+        config_file,
+        extract_xiso_binary,
+    )
 
     with tempfile.TemporaryDirectory() as tmpdir:
         try:
-            subprocess.run([extract_xiso_binary, "-d", tmpdir, "-x", iso_file], capture_output=True, check=True)
+            subprocess.run(
+                [extract_xiso_binary, "-d", tmpdir, "-x", iso_file],
+                capture_output=True,
+                check=True,
+            )
         except KeyboardInterrupt:
             raise
         except Exception:
@@ -192,7 +210,11 @@ def repack_config(iso_file: str, output_file: str, config_file: str, extract_xis
         shutil.copy(config_file, os.path.join(tmpdir, _NXDK_PGRAPH_TESTS_CONFIG_FILE))
 
         try:
-            subprocess.run([extract_xiso_binary, "-c", tmpdir, output_file], capture_output=True, check=True)
+            subprocess.run(
+                [extract_xiso_binary, "-c", tmpdir, output_file],
+                capture_output=True,
+                check=True,
+            )
         except KeyboardInterrupt:
             raise
         except Exception:
@@ -209,7 +231,11 @@ def extract_config(iso_file: str, output_file: str, extract_xiso_binary: str) ->
 
     with tempfile.TemporaryDirectory() as tmpdir:
         try:
-            subprocess.run([extract_xiso_binary, "-d", tmpdir, "-x", iso_file], capture_output=True, check=True)
+            subprocess.run(
+                [extract_xiso_binary, "-d", tmpdir, "-x", iso_file],
+                capture_output=True,
+                check=True,
+            )
         except KeyboardInterrupt:
             raise
         except Exception:
@@ -259,11 +285,18 @@ def run():
         default="nxdk_pgraph_tests_xiso-latest.iso",
         help="Download the latest nxdk_pgraph_tests xiso",
     )
-    source.add_argument("--iso", "-i", help="Path to an existing nxdk_pgraph_tests xiso file to reconfigure")
+    source.add_argument(
+        "--iso",
+        "-i",
+        help="Path to an existing nxdk_pgraph_tests xiso file to reconfigure",
+    )
 
     action = parser.add_mutually_exclusive_group()
     action.add_argument(
-        "--config", "-c", metavar="config_json_filepath", help="Path to the new JSON config to inject into the xiso"
+        "--config",
+        "-c",
+        metavar="config_json_filepath",
+        help="Path to the new JSON config to inject into the xiso",
     )
     action.add_argument(
         "--extract-config",
