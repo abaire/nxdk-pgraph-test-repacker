@@ -25,6 +25,7 @@ classifiers = [
 ]
 dependencies = [
   "platformdirs~=4.9.6",
+  "python-xiso-repacker",
   "requests~=2.33.1",
 ]
 
@@ -44,6 +45,8 @@ type = "virtual"
 path = ".venv-mypy"
 extra-dependencies = [
   "mypy>=1.0.0",
+  "pytest>=0.2.0",
+  "types-requests",
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/nxdk_pgraph_test_repacker tests}"
