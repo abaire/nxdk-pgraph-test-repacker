@@ -4,4 +4,5 @@
 
 from nxdk_pgraph_test_repacker import run
 
-run()
+if __name__ == "__main__":
+    run()
