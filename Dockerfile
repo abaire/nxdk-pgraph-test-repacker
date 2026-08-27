@@ -1,16 +1,16 @@
 FROM xboxdev/nxdk:latest
 
-RUN apk update && apk add --no-cache -u \
+RUN apk add --no-cache -u \
     python3 \
     py3-pip \
     py3-virtualenv \
     ;
 
-RUN mkdir -p /data/TestNXDKPgraphTests
+COPY . /src
 
 RUN /usr/bin/python3 -m venv /venv && \
     . /venv/bin/activate && \
-    pip3 install nxdk-pgraph-test-repacker
+    pip3 install --no-cache-dir /src
 
 WORKDIR /work
 

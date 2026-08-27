@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "platformdirs~=4.9.6",
+  "python-xiso-repacker",
   "requests~=2.33.1",
 ]
 
@@ -34,7 +34,7 @@ Issues = "https://github.com/abaire/nxdk-pgraph-test-repacker/issues"
 Source = "https://github.com/abaire/nxdk-pgraph-test-repacker"
 
 [project.scripts]
-nxdk-pgraph-test-runner = "nxdk_pgraph_test_repacker:run"
+nxdk-pgraph-test-repacker = "nxdk_pgraph_test_repacker:run"
 
 [tool.hatch.version]
 path = "src/nxdk_pgraph_test_repacker/__about__.py"
@@ -44,6 +44,8 @@ type = "virtual"
 path = ".venv-mypy"
 extra-dependencies = [
   "mypy>=1.0.0",
+  "pytest>=0.2.0",
+  "types-requests",
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/nxdk_pgraph_test_repacker tests}"
