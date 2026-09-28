@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 _NXDK_PGRAPH_TESTS_REPO_API = "https://api.github.com/repos/abaire/nxdk_pgraph_tests"
 _NXDK_PGRAPH_TESTS_CONFIG_FILE = "nxdk_pgraph_tests_config.json"
+_NXDK_PGRAPH_TESTS_FALLBACK_CONFIG_FILE = "ci_resources/fallback-config.json"
 
 
 def _copy_file(src: str, dst: str) -> None:
@@ -108,6 +109,9 @@ def extract_config(iso_file: str, output_file: str, extract_xiso_binary: str) ->
 
     # First attempt direct extraction of the standard config file name
     if extract_file(iso_file, _NXDK_PGRAPH_TESTS_CONFIG_FILE, output_file, extract_xiso_binary):
+        return True
+
+    if extract_file(iso_file, _NXDK_PGRAPH_TESTS_FALLBACK_CONFIG_FILE, output_file, extract_xiso_binary):
         return True
 
     # Fall back to extracting any JSON config file present in the ISO
